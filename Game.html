@@ -1,0 +1,165 @@
+<!doctype html>
+
+<body>
+    <canvas id="gameCanvas" width="600" height="600"></canvas>
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown', keyPressed)
+            document.addEventListener('keyup', keyReleased)
+
+            setInterval(mainloop, 1000 / 50);
+        }
+
+        //player Vars
+        var playerXpos = 0;
+        var playerYpos = 0;
+        const PLAYER_SIZE = 25;
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+
+        var WKeyPressed = false;
+        var AKeyPressed = false;
+        var SKeyPressed = false;
+        var DKeyPressed = false;
+
+        const W_KEY = 87;
+        const A_KEY = 65;
+        const S_KEY = 83;
+        const D_KEY = 68;
+
+        // enemy vars
+        var enemies = [];
+
+        var startingPos = true;
+        var totalEnemies = 8;
+        
+        //
+        var setUp = true;
+        var score  = 0;
+        
+
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
+            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player
+
+
+            playerMove();
+            enemyMove();
+
+            if (startingPos) {
+                for (i = 0; i < totalEnemies; i++) {
+                    makeEnemy();
+                }
+                startingPos = false;
+            }
+            drawEnemy();
+
+        }
+
+        function keyPressed(evt) {
+            if (evt.keyCode == W_KEY) {
+                WKeyPressed = true;
+            }
+            if (evt.keyCode == A_KEY) {
+                AKeyPressed = true;
+            }
+            if (evt.keyCode == S_KEY) {
+                SKeyPressed = true;
+            }
+            if (evt.keyCode == D_KEY) {
+                DKeyPressed = true;
+            }
+        } // end func
+
+
+        function keyReleased(evt) {
+            if (evt.keyCode == W_KEY) {
+                WKeyPressed = false;
+            }
+            if (evt.keyCode == A_KEY) {
+                AKeyPressed = false;
+            }
+            if (evt.keyCode == S_KEY) {
+                SKeyPressed = false;
+            }
+            if (evt.keyCode == D_KEY) {
+                DKeyPressed = false;
+            }
+        } // end func
+
+        function playerMove() {
+            if (AKeyPressed && playerXpos > 0) { // move left stop at edge
+                playerXpos -= playerXspeed;
+            }
+            if (DKeyPressed && playerXpos < canvas.width - PLAYER_SIZE) { // move right
+                playerXpos += playerXspeed;
+            }
+            if (WKeyPressed && playerYpos > 0) { // move up and stop at top
+                playerYpos -= playerYspeed;
+            }
+            if (SKeyPressed && playerYpos < canvas.height - PLAYER_SIZE) { // move down and stop at bottom
+                playerYpos += playerYspeed;
+            }
+        } //end func
+
+        function enemyMove() { // enemy move
+            enemies.forEach(function(enemy) {
+
+
+                enemy.enemyYpos += enemy.enemyYspeed;
+
+                if (enemy.enemyYpos > canvas.height) {
+                    enemy.enemyYpos = 0 - enemy.ENEMY_SIZE;
+                    enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
+                    enemy.enemyYpos = Math.floor(Math.random() * (4 - 2) + 2);
+                } // spawns enemy randomly at top
+
+                if (enemy.enemyYpos > canvas.height) {
+                    enemy.enemyYpos = 0;
+                }
+            });
+        } //end func
+
+
+
+        function makeEnemy() {
+
+            var enemyPos = Math.floor(Math.random() * 3) + 1;
+            var ENEMY_SIZE = Math.floor(Math.random() * (40 - 10) + 20);
+            var enemyXpos = enemyPos * (canvas.width / 3);
+            var enemyYpos = 0 - ENEMY_SIZE;
+            var enemyXspeed = Math.floor(Math.random() * (4 - 2) + 2);
+            var enemyYspeed = Math.floor(Math.random() * (10 - 5) + 5);
+
+            var enemy = {
+                enemyXpos: enemyXpos,
+                enemyYpos: enemyYpos,
+                ENEMY_SIZE: ENEMY_SIZE,
+                enemyXspeed: enemyXspeed,
+                enemyYspeed: enemyYspeed
+
+            }
+
+            enemies.push(enemy);
+        };//end func
+
+
+        function drawEnemy() {
+            enemies.forEach(function(enemy, i) {
+                colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'grey'); // enemy
+            });
+        }// end func
+        
+
+        function colorRect(x, y, w, h, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+        }
+
+    </script>
+</body>
