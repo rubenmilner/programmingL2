@@ -37,12 +37,31 @@
 
         var startingPos = true;
         var totalEnemies = 8;
-        
         //
         var setUp = true;
         var score  = 0;
-        
+        var deaths = 0;
+        var gamerun = true;
+		
+            var name = ' ';
+        while (name == ' ' || name == null) {
+            name = prompt('what is your name?', 'player') || ' ';
+        }
 
+        var difficulty = ' ';
+        while (difficulty != 'easy' && difficulty != 'hard') {
+            difficulty = prompt('Hi ' + name + ', What difficulty would you like? (easy or hard)',
+                'easy').toLowerCase()
+        }
+        
+         if(difficulty == 'easy'){
+               totalEnemies = 5;
+               }
+                else{
+                    totalEnemies = 10;
+                }
+        
+        
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
             colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player
@@ -58,7 +77,8 @@
                 startingPos = false;
             }
             drawEnemy();
-
+            
+           
         }
 
         function keyPressed(evt) {
@@ -122,6 +142,8 @@
                 if (enemy.enemyYpos > canvas.height) {
                     enemy.enemyYpos = 0;
                 }
+					
+			
             });
         } //end func
 
