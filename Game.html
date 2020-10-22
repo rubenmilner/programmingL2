@@ -39,11 +39,11 @@
         var totalEnemies = 8;
         //
         var setUp = true;
-        var score  = 0;
+        var score = 0;
         var deaths = 0;
         var gamerun = true;
-		
-            var name = ' ';
+
+        var name = ' ';
         while (name == ' ' || name == null) {
             name = prompt('what is your name?', 'player') || ' ';
         }
@@ -53,32 +53,35 @@
             difficulty = prompt('Hi ' + name + ', What difficulty would you like? (easy or hard)',
                 'easy').toLowerCase()
         }
-        
-         if(difficulty == 'easy'){
-               totalEnemies = 5;
-               }
-                else{
-                    totalEnemies = 10;
-                }
-        
-        
+
+        if (difficulty == 'easy') {
+            totalEnemies = 5;
+        } else {
+            totalEnemies = 10;
+        }
+
+
         function mainloop() {
-            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
-            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player
+            if (gamerun) {
+                colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
+                colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player
 
 
-            playerMove();
-            enemyMove();
+                playerMove();
+                enemyMove();
 
-            if (startingPos) {
-                for (i = 0; i < totalEnemies; i++) {
-                    makeEnemy();
+                if (startingPos) {
+                    for (i = 0; i < totalEnemies; i++) {
+                        makeEnemy();
+                        playerYpos = canvas.height - PLAYER_SIZE * 4;
+                        playerXpos = canvas.width / 2;
+                    }
+                    startingPos = false;
                 }
-                startingPos = false;
+                drawEnemy();
+
+
             }
-            drawEnemy();
-            
-           
         }
 
         function keyPressed(evt) {
@@ -142,8 +145,8 @@
                 if (enemy.enemyYpos > canvas.height) {
                     enemy.enemyYpos = 0;
                 }
-					
-			
+
+
             });
         } //end func
 
@@ -168,15 +171,15 @@
             }
 
             enemies.push(enemy);
-        };//end func
+        }; //end func
 
 
         function drawEnemy() {
             enemies.forEach(function(enemy, i) {
                 colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'grey'); // enemy
             });
-        }// end func
-        
+        } // end func
+
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
