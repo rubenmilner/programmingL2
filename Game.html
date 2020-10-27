@@ -69,6 +69,7 @@
 
                 playerMove();
                 enemyMove();
+                
 
                 if (startingPos) {
                     for (i = 0; i < totalEnemies; i++) {
@@ -79,8 +80,11 @@
                     startingPos = false;
                 }
                 drawEnemy();
-
-
+                
+                drawText('score: ' + score, 0, 20, '20px Ariel', 'white');
+            }
+            else{
+                drawText('game over score ' + score , 200, 300, '30px Ariel', 'white')
             }
         }
 
@@ -133,10 +137,10 @@
         function enemyMove() { // enemy move
             enemies.forEach(function(enemy) {
 
-
                 enemy.enemyYpos += enemy.enemyYspeed;
 
                 if (enemy.enemyYpos > canvas.height) {
+                    score = score + 1;
                     enemy.enemyYpos = 0 - enemy.ENEMY_SIZE;
                     enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
                     enemy.enemyYpos = Math.floor(Math.random() * (4 - 2) + 2);
@@ -145,8 +149,11 @@
                 if (enemy.enemyYpos > canvas.height) {
                     enemy.enemyYpos = 0;
                 }
-
-
+                
+                if(enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE){
+                   gamerun = false;
+                   }
+                
             });
         } //end func
 
@@ -185,6 +192,12 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
+        
+        function drawText(msg, x, y, f, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg, x, y);
+        }   
 
     </script>
 </body>
