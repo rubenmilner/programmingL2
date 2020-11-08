@@ -171,6 +171,14 @@
                 if(enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE){
                    gamerun = false;
                    }
+                if(enemy.enemyYpos + enemy.ENEMY_SIZE > lazerYpos && enemy.enemyYpos < lazerYpos + LAZER_HSIZE + LAZER_WSIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > lazerXpos && enemy.enemyXpos < lazerXpos + LAZER_HSIZE + LAZER_WSIZE){
+                    enemy.enemyYpos = 0 - enemy.ENEMY_SIZE;
+                    enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
+                    enemy.enemyYpos = Math.floor(Math.random() * (4 - 2) + 2);
+                    lazerYpos = -1;
+                    lazerXpos = -1;
+                    score ++;
+                }
                 
             });
         } //end func
@@ -206,7 +214,7 @@
                 lazerXpos = playerXpos + PLAYER_SIZE / 2;
                 lazerYpos = playerYpos;
                }
-            lazerYpos -= lazerYspeed;
+            lazerYpos -= lazerYspeed;            
         }
 
 
