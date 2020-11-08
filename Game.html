@@ -21,16 +21,25 @@
         const PLAYER_SIZE = 25;
         var playerXspeed = 5;
         var playerYspeed = 5;
+        
+        //lazar Vars
+        var lazerXpos = 0;
+        var lazerYpos = 0;
+        var lazerYspeed = 5;
+        const LAZER_WSIZE = 7;
+        const LAZER_HSIZE = 20;
 
         var WKeyPressed = false;
         var AKeyPressed = false;
         var SKeyPressed = false;
         var DKeyPressed = false;
+        var SpacebarPressed = false;
 
         const W_KEY = 87;
         const A_KEY = 65;
         const S_KEY = 83;
         const D_KEY = 68;
+        const SPACE_KEY = 32;
 
         // enemy vars
         var enemies = [];
@@ -42,6 +51,7 @@
         var score = 0;
         var deaths = 0;
         var gamerun = true;
+        
 
         var name = ' ';
         while (name == ' ' || name == null) {
@@ -51,7 +61,7 @@
         var difficulty = ' ';
         while (difficulty != 'easy' && difficulty != 'hard') {
             difficulty = prompt('Hi ' + name + ', What difficulty would you like? (easy or hard)',
-                'easy').toLowerCase()
+                'hard').toLowerCase()
         }
 
         if (difficulty == 'easy') {
@@ -65,10 +75,12 @@
             if (gamerun) {
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); // player
-
+                
 
                 playerMove();
                 enemyMove();
+                drawLazer();
+                lazerMove();
                 
 
                 if (startingPos) {
@@ -84,7 +96,7 @@
                 drawText('score: ' + score, 0, 20, '20px Ariel', 'white');
             }
             else{
-                drawText('game over score ' + score , 200, 300, '30px Ariel', 'white')
+                drawText(name +' game over score '+ score, 150, 300, '30px Ariel', 'white')
             }
         }
 
@@ -101,6 +113,9 @@
             if (evt.keyCode == D_KEY) {
                 DKeyPressed = true;
             }
+            if (evt.keyCode == SPACE_KEY){
+                SpacebarPressed = true;
+                }
         } // end func
 
 
@@ -117,6 +132,9 @@
             if (evt.keyCode == D_KEY) {
                 DKeyPressed = false;
             }
+            if (evt.keyCode == SPACE_KEY){
+                SpacebarPressed= false;
+                }
         } // end func
 
         function playerMove() {
@@ -166,7 +184,7 @@
             var enemyXpos = enemyPos * (canvas.width / 3);
             var enemyYpos = 0 - ENEMY_SIZE;
             var enemyXspeed = Math.floor(Math.random() * (4 - 2) + 2);
-            var enemyYspeed = Math.floor(Math.random() * (10 - 5) + 5);
+            var enemyYspeed = Math.floor(Math.random() * (10 - 5) + 6);
 
             var enemy = {
                 enemyXpos: enemyXpos,
@@ -179,6 +197,17 @@
 
             enemies.push(enemy);
         }; //end func
+        
+        function drawLazer(){
+            colorRect(lazerXpos, lazerYpos, LAZER_WSIZE, LAZER_HSIZE, 'orange'); // lazer
+        }// end func
+        function lazerMove(){
+            if(SpacebarPressed && lazerYpos < canvas.height){
+                lazerXpos = playerXpos + PLAYER_SIZE / 2;
+                lazerYpos = playerYpos;
+               }
+            lazerYpos -= lazerYspeed;
+        }
 
 
         function drawEnemy() {
